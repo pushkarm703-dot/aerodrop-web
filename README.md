@@ -64,7 +64,7 @@ If you want to contribute or build from source:
 
 ```bash
 # Clone the repo
-git clone [https://github.com/yourusername/p2pcommunication.git](https://github.com/yourusername/p2pcommunication.git)
+git clone [https://github.com/pushkarm703-dot/p2pcommunication.git](https://github.com/yourusername/p2pcommunication.git)
 
 # Install dependencies
 flutter pub get
