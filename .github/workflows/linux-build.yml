@@ -2,15 +2,15 @@ name: Build Linux App
 
 on:
   push:
-    branches: [ "main" ] # Runs every time you push to main
-  workflow_dispatch: # Allows you to run it manually from the website
+    branches: [ "main" ]
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4  # Updated to v4
 
       - name: Install Linux Build Requirements
         run: |
@@ -32,7 +32,7 @@ jobs:
         run: flutter build linux --release
 
       - name: Upload Finished App
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4  # Updated to v4
         with:
           name: AeroDrop-Linux
           path: build/linux/x64/release/bundle/
