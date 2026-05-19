@@ -20,6 +20,20 @@
                     fontFamily: {
                         mono: ['Courier New', 'monospace'],
                         sans: ['system-ui', '-apple-system', 'sans-serif']
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'pulse-glow': 'pulseGlow 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-15px)' },
+                        },
+                        pulseGlow: {
+                            '0%, 100%': { opacity: '0.4', transform: 'scale(1)' },
+                            '50%': { opacity: '0.8', transform: 'scale(1.05)' },
+                        }
                     }
                 }
             }
@@ -35,73 +49,94 @@
             border: 1px solid rgba(255, 255, 255, 0.05);
         }
         .glow-text { text-shadow: 0 0 20px rgba(0, 242, 255, 0.6); }
+        .download-card:hover { border-color: #00F2FF; box-shadow: 0 0 30px rgba(0, 242, 255, 0.15); }
         
-        /* NEW: AMBIENT FLOATING BACKGROUND ANIMATION */
-        .ambient-bg-container {
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            overflow: hidden;
-            z-index: -2;
-            pointer-events: none; /* Prevents all mouse glitches */
-            /* Fades the screenshots to black at the bottom so it blends perfectly */
-            mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
-            -webkit-mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
+        /* THE FULL-WIDTH 3D INTERACTIVE SHOWCASE */
+        main.hero-container {
+            /* Enables 3D perspective for the entire main area */
+            perspective: 2000px; 
+            overflow: visible;
         }
 
-        .ambient-screenshot {
+        .showcase-wrapper {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transform-style: preserve-3d;
+            /* Slow, constant ambient float */
+            animation: float-3d-ambient 12s ease-in-out infinite;
+            z-index: 1; /* Sits behind buttons (z-20) but in front of background (z-[-10]) */
+        }
+
+        .showcase-img {
             position: absolute;
             border-radius: 16px;
             border: 1px solid rgba(0, 242, 255, 0.15);
-            box-shadow: 0 0 40px rgba(0, 242, 255, 0.05);
-            opacity: 0.15; /* Highly transparent background watermark */
-            filter: blur(3px); /* Soft glass effect */
-            will-change: transform;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.8), 0 0 20px rgba(0, 242, 255, 0.05);
+            transition: all 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+            cursor: pointer;
+            transform-style: preserve-3d;
+            
+            /* GOAL 1 FIX: Transparency made significantly more visible */
+            opacity: 0.5; /* Increased from 0.25 to 0.5 */
+            filter: blur(4px) brightness(0.6); /* Standard view is soft and muted */
         }
 
-        /* Spaced out positions and independent animations */
-        .ambient-1 {
-            width: 280px;
-            top: 10%;
-            left: 2%;
-            animation: drift-1 18s ease-in-out infinite alternate;
+        /* GOAL 2 FIX: Ensured all three are distinctly positioned to cover space */
+        .img-left { 
+            width: 250px;
+            transform: translateX(-400px) translateZ(-200px) rotateY(40deg); 
+        }
+        .img-center { 
+            width: 320px;
+            transform: translateX(0px) translateZ(-50px); 
+            z-index: 2; 
+        }
+        .img-right { 
+            width: 250px;
+            transform: translateX(400px) translateZ(-200px) rotateY(-40deg); 
+        }
+
+        /* GOAL 3 FIX: "Very good cool animation" that makes it "pop out" */
+        
+        /* 1. Mouse Interaction Parallax - Controlled via JavaScript below */
+        .interactive-perspective {
+            transition: transform 0.1s ease-out; /* Smooth tracking */
+        }
+
+        /* 2. BUT the specific image you touch OVERRIDES the dimming. It pops out, gets huge, and glows! */
+        .showcase-img:hover {
+            /* Direct Interaction makes it focus, opaque, and central */
+            opacity: 0.95 !important;
+            filter: blur(0px) brightness(1.15) !important;
+            transform: translateX(0px) translateZ(200px) rotateY(0deg) scale(1.3) !important;
+            z-index: 50 !important; /* Flies to the VERY front */
+            border-color: #00F2FF !important;
+            box-shadow: 0 40px 100px rgba(0, 0, 0, 0.9), 0 0 80px rgba(0, 242, 255, 0.6) !important;
         }
         
-        .ambient-2 {
-            width: 320px;
-            top: 30%;
-            right: 2%;
-            animation: drift-2 22s ease-in-out infinite alternate;
+        /* Ambient Background Floating */
+        @keyframes float-3d-ambient {
+            0%, 100% { transform: translateY(0) rotateX(1deg); }
+            50% { transform: translateY(-20px) rotateX(-1deg); }
         }
 
-        .ambient-3 {
-            width: 400px;
-            bottom: -15%;
-            left: 50%;
-            margin-left: -200px; /* Centers it */
-            animation: drift-3 25s ease-in-out infinite alternate;
-            opacity: 0.12;
-            filter: blur(4px);
-        }
-
-        /* Cinematic Keyframes */
-        @keyframes drift-1 {
-            0% { transform: translateY(0px) rotate(-12deg) scale(1); }
-            100% { transform: translateY(-60px) rotate(-5deg) scale(1.05); }
-        }
-        @keyframes drift-2 {
-            0% { transform: translateY(0px) rotate(15deg) scale(1); }
-            100% { transform: translateY(50px) rotate(8deg) scale(1.03); }
-        }
-        @keyframes drift-3 {
-            0% { transform: translateY(0px) rotate(-5deg) scale(1); }
-            100% { transform: translateY(-80px) rotate(5deg) scale(1.08); }
+        .showcase-fade {
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            height: 200px;
+            background: linear-gradient(to bottom, transparent, #050B18);
+            z-index: 20;
+            pointer-events: none;
         }
     </style>
 </head>
 <body class="font-sans antialiased selection:bg-primary selection:text-black relative flex flex-col min-h-screen">
 
-    <div class="fixed top-[-10%] left-[-10%] w-[500px] h-[500px] bg-secondary/20 blur-[150px] rounded-full pointer-events-none z-[-10]"></div>
-    <div class="fixed bottom-[-10%] right-[-10%] w-[600px] h-[600px] bg-primary/10 blur-[150px] rounded-full pointer-events-none z-[-10]"></div>
+    <div class="fixed top-[-10%] left-[-10%] w-[500px] h-[500px] bg-secondary/20 blur-[150px] rounded-full pointer-events-none -z-10"></div>
+    <div class="fixed bottom-[-10%] right-[-10%] w-[600px] h-[600px] bg-primary/10 blur-[150px] rounded-full pointer-events-none -z-10"></div>
 
     <nav class="fixed w-full z-50 glass-panel border-b-0 border-white/5">
         <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
@@ -114,18 +149,19 @@
         </div>
     </nav>
 
-    <main class="flex-grow flex flex-col items-center justify-center text-center px-4 pt-32 pb-40 relative overflow-hidden">
+    <main class="hero-container flex-grow flex flex-col items-center justify-center text-center px-4 pt-32 pb-20 relative">
         
-        <div class="ambient-bg-container">
-            <img src="screenshot1.png" alt="Background Element" class="ambient-screenshot ambient-1">
-            <img src="screenshot2.png" alt="Background Element" class="ambient-screenshot ambient-2">
-            <img src="screenshot3.png" alt="Background Element" class="ambient-screenshot ambient-3">
+        <div class="showcase-wrapper interactive-perspective" id="perspective-container">
+            <img src="screenshot1.png" alt="AeroDrop Flow" class="showcase-img img-left">
+            <img src="screenshot2.png" alt="AeroDrop Core" class="showcase-img img-center">
+            <img src="screenshot3.png" alt="AeroDrop Clipboard" class="showcase-img img-right">
         </div>
 
+        <div class="showcase-fade"></div>
+
         <div class="relative z-20 flex flex-col items-center">
-            
-            <div data-aos="zoom-in" data-aos-duration="1200" class="relative w-48 h-48 mb-10 mt-10">
-                <div class="absolute inset-0 bg-primary/20 rounded-full blur-2xl"></div>
+            <div data-aos="zoom-in" data-aos-duration="1200" class="relative w-48 h-48 mb-10 animate-float mt-10">
+                <div class="absolute inset-0 bg-primary/20 rounded-full blur-2xl animate-pulse-glow"></div>
                 <div class="relative w-full h-full rounded-full border border-primary/30 glass-panel flex items-center justify-center shadow-[0_0_50px_rgba(0,242,255,0.2)]">
                     <div class="w-28 h-28 rounded-full border border-primary/20 flex items-center justify-center bg-background">
                         <svg class="w-12 h-12 text-primary drop-shadow-[0_0_10px_rgba(0,242,255,0.8)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -148,7 +184,7 @@
                 Lightning-fast, peer-to-peer file transfer and clipboard synchronization. Bypass the cloud and sync directly across your local network with uncompromised encryption.
             </p>
 
-            <div data-aos="fade-up" data-aos-delay="500" class="flex flex-col sm:flex-row gap-5 w-full max-w-xl mx-auto px-4">
+            <div data-aos="fade-up" data-aos-delay="500" class="flex flex-col sm:flex-row gap-5 w-full max-w-xl mx-auto px-4 relative z-20">
                 <a href="Aerodrop_Setup.exe" download class="flex-1 bg-primary text-background font-black tracking-widest py-4 px-6 rounded-xl flex items-center justify-center gap-3 hover:scale-[1.05] hover:shadow-[0_0_40px_rgba(0,242,255,0.5)] transition-all duration-300">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
                     GET WINDOWS .EXE
@@ -160,7 +196,7 @@
                 </a>
             </div>
 
-            <div data-aos="fade-up" data-aos-delay="600" class="flex justify-center w-full max-w-xl mx-auto px-4 mt-4">
+            <div data-aos="fade-up" data-aos-delay="600" class="flex justify-center w-full max-w-xl mx-auto px-4 mt-4 relative z-20">
                 <a href="app-release.apk" download="Aerodrop.apk" class="glass-panel border border-[#3DDC84]/25 text-[#3DDC84] font-bold tracking-widest py-3 px-8 rounded-xl flex items-center justify-center gap-3 hover:bg-[#3DDC84]/10 hover:border-[#3DDC84]/60 hover:scale-[1.03] hover:shadow-[0_0_30px_rgba(61,220,132,0.25)] transition-all duration-300 text-sm w-full sm:w-auto">
                     <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
                         <path d="M6.18 15.64a2.18 2.18 0 0 1-2.18-2.18V9.19a2.18 2.18 0 1 1 4.36 0v4.27a2.18 2.18 0 0 1-2.18 2.18M17.82 15.64a2.18 2.18 0 0 1-2.18-2.18V9.19a2.18 2.18 0 1 1 4.36 0v4.27a2.18 2.18 0 0 1-2.18 2.18M5.5 6.25C5.5 3.93 8.46 2 12 2s6.5 1.93 6.5 4.25v9.75c0 2.32-2.96 4-6.5 4s-6.5-1.68-6.5-4V6.25m2.22-3.06-1-1.73a.25.25 0 0 1 .43-.25l1 1.76a6.6 6.6 0 0 1 3.35-.9c1.21 0 2.35.32 3.35.9l1.01-1.76a.25.25 0 0 1 .43.25l-1 1.73A5.6 5.6 0 0 1 18 6.25H6a5.6 5.6 0 0 1 2.22-3.06M10 5.5a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5m4 0a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5"/>
@@ -219,6 +255,35 @@
             once: true,
             offset: 20,
         });
+
+        /* THE JAVASCRIPT ANIMATION - Interactive Mouse Tracking */
+        const mainSection = document.querySelector('main.hero-container');
+        const scContainer = document.getElementById('perspective-container');
+
+        if (mainSection && scContainer) {
+            mainSection.addEventListener('mousemove', (e) => {
+                // If the cursor is actually hovering one of the images, let the CSS handle the pop-out
+                if (e.target.classList.contains('showcase-img')) return;
+
+                // Track cursor position relative to the center of the screen
+                const xAxis = (window.innerWidth / 2 - e.pageX) / 40; // Tilt sensitivity
+                const yAxis = (window.innerHeight / 2 - e.pageY) / 40;
+
+                // Apply dynamic tilt to the entire gallery container
+                scContainer.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
+            });
+
+            // Re-center smoothly when mouse leaves the hero area
+            mainSection.addEventListener('mouseleave', () => {
+                scContainer.style.transition = 'all 1s ease'; // Smooth reset transition
+                scContainer.style.transform = `rotateY(0deg) rotateX(0deg)`;
+            });
+
+            // Switch transition off for immediate tracking on re-entry
+            mainSection.addEventListener('mouseenter', () => {
+                scContainer.style.transition = 'none'; 
+            });
+        }
     </script>
 </body>
 </html>
