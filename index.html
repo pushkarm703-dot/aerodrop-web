@@ -6,7 +6,6 @@
     <title>Aerodrop | Secure Local Sync</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
-    
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     
     <script>
@@ -50,6 +49,36 @@
             border: 1px solid rgba(255, 255, 255, 0.05);
         }
         .glow-text { text-shadow: 0 0 20px rgba(0, 242, 255, 0.6); }
+        
+        /* NEW: Transparent 3D Background Screenshots */
+        .screenshot-bg {
+            position: absolute;
+            bottom: -200px;
+            left: 50%;
+            transform: translateX(-50%) perspective(1200px) rotateX(20deg);
+            width: 140%;
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            opacity: 0.15; /* Keeps it subtle and transparent */
+            pointer-events: none; /* Prevents users from clicking them */
+            z-index: -1;
+            /* Fades the top and bottom edges into the black background */
+            mask-image: linear-gradient(to bottom, transparent 0%, black 30%, black 70%, transparent 100%);
+            -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 30%, black 70%, transparent 100%);
+        }
+        .screenshot-bg img {
+            width: 280px;
+            height: auto;
+            border-radius: 1rem;
+            border: 1px solid rgba(0, 242, 255, 0.3);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
+            object-fit: cover;
+        }
+        /* Offset the middle screenshot slightly for a dynamic look */
+        .screenshot-bg img:nth-child(2) {
+            transform: translateY(-40px);
+        }
     </style>
 </head>
 <body class="font-sans antialiased selection:bg-primary selection:text-black relative flex flex-col min-h-screen">
@@ -68,7 +97,7 @@
         </div>
     </nav>
 
-    <main class="flex-grow flex flex-col items-center justify-center text-center px-4 pt-32 pb-20 relative">
+    <main class="flex-grow flex flex-col items-center justify-center text-center px-4 pt-32 pb-32 relative">
         
         <div data-aos="zoom-in" data-aos-duration="1200" class="relative w-48 h-48 mb-10 animate-float mt-10">
             <div class="absolute inset-0 bg-primary/20 rounded-full blur-2xl animate-pulse-glow"></div>
@@ -94,8 +123,7 @@
             Lightning-fast, peer-to-peer file transfer and clipboard synchronization. Bypass the cloud and sync directly across your local network with uncompromised encryption.
         </p>
 
-        <div data-aos="fade-up" data-aos-delay="500" class="flex flex-col sm:flex-row gap-5 w-full max-w-xl mx-auto px-4">
-            
+        <div data-aos="fade-up" data-aos-delay="500" class="flex flex-col sm:flex-row gap-5 w-full max-w-xl mx-auto px-4 relative z-20">
             <a href="Aerodrop_Setup.exe" download class="flex-1 bg-primary text-background font-black tracking-widest py-4 px-6 rounded-xl flex items-center justify-center gap-3 hover:scale-[1.03] hover:shadow-[0_0_40px_rgba(0,242,255,0.5)] transition-all duration-300">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
                 WINDOWS .EXE
@@ -107,17 +135,20 @@
             </a>
         </div>
 
-        <div data-aos="fade-up" data-aos-delay="600" class="flex justify-center w-full max-w-xl mx-auto px-4 mt-4">
-            <a href="Aerodrop.apk"
-               download="Aerodrop.apk"
-               onclick="(function(e){e.preventDefault();var a=document.createElement('a');a.href='Aerodrop.apk';a.download='Aerodrop.apk';document.body.appendChild(a);a.click();document.body.removeChild(a);})(event)"
-               class="glass-panel border border-[#3DDC84]/25 text-[#3DDC84] font-bold tracking-widest py-3 px-8 rounded-xl flex items-center justify-center gap-3 hover:bg-[#3DDC84]/10 hover:border-[#3DDC84]/60 hover:scale-[1.03] hover:shadow-[0_0_30px_rgba(61,220,132,0.25)] transition-all duration-300 text-sm w-full sm:w-auto">
+        <div data-aos="fade-up" data-aos-delay="600" class="flex justify-center w-full max-w-xl mx-auto px-4 mt-4 relative z-20">
+            <a href="Aerodrop.apk" download="Aerodrop.apk" class="glass-panel border border-[#3DDC84]/25 text-[#3DDC84] font-bold tracking-widest py-3 px-8 rounded-xl flex items-center justify-center gap-3 hover:bg-[#3DDC84]/10 hover:border-[#3DDC84]/60 hover:scale-[1.03] hover:shadow-[0_0_30px_rgba(61,220,132,0.25)] transition-all duration-300 text-sm w-full sm:w-auto">
                 <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
                     <path d="M6.18 15.64a2.18 2.18 0 0 1-2.18-2.18V9.19a2.18 2.18 0 1 1 4.36 0v4.27a2.18 2.18 0 0 1-2.18 2.18M17.82 15.64a2.18 2.18 0 0 1-2.18-2.18V9.19a2.18 2.18 0 1 1 4.36 0v4.27a2.18 2.18 0 0 1-2.18 2.18M5.5 6.25C5.5 3.93 8.46 2 12 2s6.5 1.93 6.5 4.25v9.75c0 2.32-2.96 4-6.5 4s-6.5-1.68-6.5-4V6.25m2.22-3.06-1-1.73a.25.25 0 0 1 .43-.25l1 1.76a6.6 6.6 0 0 1 3.35-.9c1.21 0 2.35.32 3.35.9l1.01-1.76a.25.25 0 0 1 .43.25l-1 1.73A5.6 5.6 0 0 1 18 6.25H6a5.6 5.6 0 0 1 2.22-3.06M10 5.5a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5m4 0a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5"/>
                 </svg>
                 DIRECT APK DOWNLOAD
                 <span class="ml-1 text-[9px] font-mono tracking-wider text-[#3DDC84]/50 border border-[#3DDC84]/20 rounded px-1.5 py-0.5 hidden sm:inline">SIDELOAD</span>
             </a>
+        </div>
+
+        <div class="screenshot-bg" data-aos="fade-up" data-aos-delay="800" data-aos-duration="1500">
+            <img src="screenshot1.png" alt="AeroDrop Interface">
+            <img src="screenshot2.png" alt="AeroDrop File Transfer">
+            <img src="screenshot3.png" alt="AeroDrop Mesh Clipboard">
         </div>
 
     </main>
@@ -147,7 +178,7 @@
                         <svg class="w-7 h-7 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
                     </div>
                     <h3 class="font-mono text-green-400 font-bold tracking-widest mb-3">CRYPTOGRAPHICALLY SECURE</h3>
-                    <p class="text-white/50 text-sm leading-relaxed">Worried about snoops on the college Wi-Fi? Your data never leaves your local network. Every session is locked down with rolling 4-digit PINs, SHA-256 hashing, and HMAC challenge-response handshakes.</p>
+                    <p class="text-white/50 text-sm leading-relaxed">Worried about snoops on public Wi-Fi or corporate networks? Your data never leaves your local hardware. Every session is locked down with rolling 4-digit PINs, SHA-256 hashing, and HMAC challenge-response handshakes.</p>
                 </div>
             </div>
         </div>
