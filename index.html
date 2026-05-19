@@ -53,11 +53,12 @@
         
         /* THE FULL-WIDTH 3D INTERACTIVE SHOWCASE */
         main.hero-container {
-            /* Enables 3D perspective for the entire main area */
             perspective: 2000px; 
-            overflow: visible;
+            overflow: hidden; /* Prevents mobile horizontal scrolling */
+            width: 100%;
         }
 
+        /* DEFAULT DESKTOP BEHAVIOR */
         .showcase-wrapper {
             position: absolute;
             inset: 0;
@@ -65,9 +66,8 @@
             justify-content: center;
             align-items: center;
             transform-style: preserve-3d;
-            /* Slow, constant ambient float */
             animation: float-3d-ambient 12s ease-in-out infinite;
-            z-index: 1; /* Sits behind buttons (z-20) but in front of background (z-[-10]) */
+            z-index: 1; 
         }
 
         .showcase-img {
@@ -79,12 +79,10 @@
             cursor: pointer;
             transform-style: preserve-3d;
             
-            /* GOAL 1 FIX: Transparency decreased (opacity increased) for better visibility */
-            opacity: 0.7; /* Increased from 0.5 to 0.7 */
-            filter: blur(2px) brightness(0.8); /* Made slightly sharper and brighter by default */
+            opacity: 0.7; 
+            filter: blur(2px) brightness(0.8); 
         }
 
-        /* GOAL 2 FIX: Ensured all three are distinctly positioned to cover space */
         .img-left { 
             width: 250px;
             transform: translateX(-400px) translateZ(-200px) rotateY(40deg); 
@@ -98,26 +96,64 @@
             width: 250px;
             transform: translateX(400px) translateZ(-200px) rotateY(-40deg); 
         }
-
-        /* GOAL 3 FIX: "Very good cool animation" that makes it "pop out" */
         
-        /* 1. Mouse Interaction Parallax - Controlled via JavaScript below */
-        .interactive-perspective {
-            transition: transform 0.1s ease-out; /* Smooth tracking */
+        /* ONLY apply complex hover interactions on Desktop */
+        @media (min-width: 769px) {
+            .interactive-perspective {
+                transition: transform 0.1s ease-out; 
+            }
+            .showcase-img:hover {
+                opacity: 0.95 !important;
+                filter: blur(0px) brightness(1.15) !important;
+                transform: translateX(0px) translateZ(200px) rotateY(0deg) scale(1.3) !important;
+                z-index: 50 !important; 
+                border-color: #00F2FF !important;
+                box-shadow: 0 40px 100px rgba(0, 0, 0, 0.9), 0 0 80px rgba(0, 242, 255, 0.6) !important;
+            }
         }
 
-        /* 2. BUT the specific image you touch OVERRIDES the dimming. It pops out, gets huge, and glows! */
-        .showcase-img:hover {
-            /* Direct Interaction makes it focus, opaque, and central */
-            opacity: 0.95 !important;
-            filter: blur(0px) brightness(1.15) !important;
-            transform: translateX(0px) translateZ(200px) rotateY(0deg) scale(1.3) !important;
-            z-index: 50 !important; /* Flies to the VERY front */
-            border-color: #00F2FF !important;
-            box-shadow: 0 40px 100px rgba(0, 0, 0, 0.9), 0 0 80px rgba(0, 242, 255, 0.6) !important;
+        /* MOBILE RESPONSIVE FIXES */
+        @media (max-width: 768px) {
+            main.hero-container {
+                padding-top: 6rem; /* Adjust padding for mobile header */
+            }
+            .showcase-wrapper {
+                position: relative; /* This pushes the text BELOW the images on mobile */
+                height: 320px;
+                margin-top: 0;
+                margin-bottom: 2rem;
+                animation: float-3d-ambient 8s ease-in-out infinite; /* Slightly faster on mobile */
+            }
+            .showcase-img {
+                pointer-events: none; /* Disables glitchy touch hovering */
+            }
+            /* Scaled down dimensions to prevent horizontal screen breaking */
+            .img-left { 
+                width: 130px;
+                transform: translateX(-100px) translateZ(-150px) rotateY(35deg); 
+                opacity: 0.5;
+            }
+            .img-center { 
+                width: 180px;
+                transform: translateX(0px) translateZ(0px); 
+                opacity: 0.95;
+                filter: blur(0px) brightness(1.1);
+                z-index: 5;
+            }
+            .img-right { 
+                width: 130px;
+                transform: translateX(100px) translateZ(-150px) rotateY(-35deg); 
+                opacity: 0.5;
+            }
+            .showcase-fade {
+                display: none; /* Hide fade overlay on mobile to keep text clean */
+            }
+            h1.text-5xl {
+                font-size: 3.2rem;
+                line-height: 1.1;
+            }
         }
-        
-        /* Ambient Background Floating */
+
         @keyframes float-3d-ambient {
             0%, 100% { transform: translateY(0) rotateX(1deg); }
             50% { transform: translateY(-20px) rotateX(-1deg); }
@@ -159,8 +195,8 @@
 
         <div class="showcase-fade"></div>
 
-        <div class="relative z-20 flex flex-col items-center">
-            <div data-aos="zoom-in" data-aos-duration="1200" class="relative w-48 h-48 mb-10 animate-float mt-10">
+        <div class="relative z-20 flex flex-col items-center w-full">
+            <div data-aos="zoom-in" data-aos-duration="1200" class="relative w-48 h-48 mb-10 animate-float mt-10 md:mt-20">
                 <div class="absolute inset-0 bg-primary/20 rounded-full blur-2xl animate-pulse-glow"></div>
                 <div class="relative w-full h-full rounded-full border border-primary/30 glass-panel flex items-center justify-center shadow-[0_0_50px_rgba(0,242,255,0.2)]">
                     <div class="w-28 h-28 rounded-full border border-primary/20 flex items-center justify-center bg-background">
@@ -185,12 +221,12 @@
             </p>
 
             <div data-aos="fade-up" data-aos-delay="500" class="flex flex-col sm:flex-row gap-5 w-full max-w-xl mx-auto px-4 relative z-20">
-                <a href="Aerodrop_Setup.exe" download class="flex-1 bg-primary text-background font-black tracking-widest py-4 px-6 rounded-xl flex items-center justify-center gap-3 hover:scale-[1.05] hover:shadow-[0_0_40px_rgba(0,242,255,0.5)] transition-all duration-300">
+                <a href="Aerodrop_Setup.exe" download class="flex-1 bg-primary text-background font-black tracking-widest py-4 px-6 rounded-xl flex items-center justify-center gap-3 hover:scale-[1.05] hover:shadow-[0_0_40px_rgba(0,242,255,0.5)] transition-all duration-300 w-full">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
                     GET WINDOWS .EXE
                 </a>
 
-                <a href="#" target="_blank" class="flex-1 glass-panel border border-white/10 text-white font-bold tracking-widest py-4 px-6 rounded-xl flex items-center justify-center gap-3 hover:bg-white/5 hover:border-white/30 hover:scale-[1.05] transition-all duration-300">
+                <a href="#" target="_blank" class="flex-1 glass-panel border border-white/10 text-white font-bold tracking-widest py-4 px-6 rounded-xl flex items-center justify-center gap-3 hover:bg-white/5 hover:border-white/30 hover:scale-[1.05] transition-all duration-300 w-full">
                     <svg class="w-6 h-6" viewBox="0 0 24 24" fill="currentColor"><path d="M3.609 1.814L13.792 12 3.61 22.186a1.983 1.983 0 0 1-.587-1.42V3.235c0-.54.21-1.05.586-1.421z"/><path d="M14.5 12.708l3.125 3.125-11.458 6.625A1.984 1.984 0 0 1 4.333 21.417L14.5 11.25l-3.125-3.125z" fill="#FF3333"/><path d="M17.625 15.833l3.625-2.083a2.012 2.012 0 0 0 0-3.5L17.625 8.167l-3.125 3.125 3.125 3.125z" fill="#FFD100"/><path d="M14.5 11.292L4.333 1.125a1.984 1.984 0 0 1 1.834-1.042L17.625 6.708l-3.125 3.125z" fill="#00A651"/></svg>
                     GOOGLE PLAY
                 </a>
@@ -260,26 +296,22 @@
         const mainSection = document.querySelector('main.hero-container');
         const scContainer = document.getElementById('perspective-container');
 
-        if (mainSection && scContainer) {
+        // Only run 3D perspective tracking on larger screens (Desktop)
+        if (mainSection && scContainer && window.innerWidth > 768) {
             mainSection.addEventListener('mousemove', (e) => {
-                // If the cursor is actually hovering one of the images, let the CSS handle the pop-out
                 if (e.target.classList.contains('showcase-img')) return;
 
-                // Track cursor position relative to the center of the screen
-                const xAxis = (window.innerWidth / 2 - e.pageX) / 40; // Tilt sensitivity
+                const xAxis = (window.innerWidth / 2 - e.pageX) / 40; 
                 const yAxis = (window.innerHeight / 2 - e.pageY) / 40;
 
-                // Apply dynamic tilt to the entire gallery container
                 scContainer.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
             });
 
-            // Re-center smoothly when mouse leaves the hero area
             mainSection.addEventListener('mouseleave', () => {
-                scContainer.style.transition = 'all 1s ease'; // Smooth reset transition
+                scContainer.style.transition = 'all 1s ease'; 
                 scContainer.style.transform = `rotateY(0deg) rotateX(0deg)`;
             });
 
-            // Switch transition off for immediate tracking on re-entry
             mainSection.addEventListener('mouseenter', () => {
                 scContainer.style.transition = 'none'; 
             });
