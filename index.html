@@ -55,7 +55,7 @@
         .showcase-container {
             perspective: 1400px;
             width: 100%;
-            max-width: 1200px; /* Widened to cover empty space */
+            max-width: 1200px;
             margin: 40px auto 0px auto; 
             position: relative;
             z-index: 10;
@@ -63,66 +63,66 @@
         
         .showcase-wrapper {
             position: relative;
-            height: 550px; /* Added explicit height so absolute images fit perfectly */
+            height: 550px;
             display: flex;
             justify-content: center;
             align-items: center;
             transform-style: preserve-3d;
             animation: float-3d 8s ease-in-out infinite;
+            /* REMOVED the global opacity here so hovered images can be fully bright! */
         }
 
         .showcase-img {
-            position: absolute; /* Crucial for the pop-to-center animation */
+            position: absolute;
             width: 280px;
             height: auto;
             border-radius: 16px;
             border: 1px solid rgba(0, 242, 255, 0.2);
             box-shadow: 0 15px 50px rgba(0, 0, 0, 0.8), 0 0 20px rgba(0, 242, 255, 0.05);
-            /* This bezier curve gives it that snappy 'Apple-style' pop */
-            transition: all 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+            transition: all 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
             cursor: pointer;
         }
 
-        /* DEFAULT SPACED OUT POSITIONS */
+        /* DEFAULT SPACED OUT POSITIONS (Highly transparent by default) */
         .img-left { 
             transform: translateX(-350px) translateZ(-150px) rotateY(35deg); 
-            opacity: 0.4;
-            filter: blur(2px) brightness(0.7);
+            opacity: 0.3;
+            filter: blur(2px);
         }
         .img-center { 
             transform: translateX(0px) translateZ(0px) rotateY(0deg); 
             z-index: 2; 
             width: 320px; 
-            opacity: 0.85;
-            border-color: rgba(0, 242, 255, 0.5);
+            opacity: 0.6;
+            border-color: rgba(0, 242, 255, 0.4);
             box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9), 0 0 30px rgba(0, 242, 255, 0.15);
         }
         .img-right { 
             transform: translateX(350px) translateZ(-150px) rotateY(-35deg); 
-            opacity: 0.4;
-            filter: blur(2px) brightness(0.7);
+            opacity: 0.3;
+            filter: blur(2px);
         }
 
         /* INTERACTIVE POP-OUT ANIMATIONS */
-        /* 1. When hovering ANY part of the gallery, push everything back and dim it */
+        
+        /* 1. When hovering the gallery area, push ALL images back and dim them heavily */
         .showcase-wrapper:hover .showcase-img {
-            opacity: 0.15;
-            filter: blur(5px) brightness(0.4);
+            opacity: 0.1;
+            filter: blur(8px) brightness(0.4);
             transform: translateZ(-250px) rotateY(0deg);
         }
 
-        /* 2. The specific screenshot you are touching overrides the dimming, flies to center, and blooms */
+        /* 2. BUT the specific image you hover OVERRIDES the dimming. It pops out, gets huge, and glows! */
         .showcase-wrapper .showcase-img:hover {
             opacity: 1 !important;
-            filter: blur(0px) brightness(1.1) !important;
-            /* Fly to center (translateX:0), pop forward (translateZ:150), and scale up */
-            transform: translateX(0px) translateZ(150px) rotateY(0deg) scale(1.1) !important;
-            z-index: 20;
+            filter: blur(0px) brightness(1.15) !important;
+            transform: translateX(0px) translateZ(150px) rotateY(0deg) scale(1.2) !important;
+            z-index: 50 !important;
             border-color: #00F2FF !important;
-            box-shadow: 0 40px 100px rgba(0, 0, 0, 0.9), 0 0 60px rgba(0, 242, 255, 0.5) !important;
+            box-shadow: 0 40px 100px rgba(0, 0, 0, 0.9), 0 0 80px rgba(0, 242, 255, 0.6) !important;
         }
 
-        /* The Smooth Background Floating Keyframe */
+        /* Background Floating Keyframe */
         @keyframes float-3d {
             0%, 100% { transform: translateY(0) rotateX(2deg); }
             50% { transform: translateY(-15px) rotateX(-2deg); }
@@ -204,10 +204,8 @@
 
         <div class="showcase-container" data-aos="fade-up" data-aos-delay="800" data-aos-duration="1500">
             <div class="showcase-wrapper">
-                <img src="screenshot1.png" alt="AeroDrop Interface" class="showcase-img img-left">
-                
+                <img src="screenshot1.png" alt="AeroDrop History" class="showcase-img img-left">
                 <img src="screenshot2.png" alt="AeroDrop File Transfer" class="showcase-img img-center">
-                
                 <img src="screenshot3.png" alt="AeroDrop Mesh Clipboard" class="showcase-img img-right">
             </div>
             <div class="showcase-fade"></div>
