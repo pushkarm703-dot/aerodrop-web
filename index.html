@@ -54,7 +54,7 @@
         /* THE FULL-WIDTH 3D INTERACTIVE SHOWCASE */
         main.hero-container {
             perspective: 2000px; 
-            overflow: hidden; /* Prevents mobile horizontal scrolling */
+            overflow: hidden; 
             width: 100%;
         }
 
@@ -87,7 +87,6 @@
             width: 250px;
             transform: translateX(-400px) translateZ(-200px) rotateY(40deg); 
         }
-        /* SPECIFIC TRANSPARENCY FOR CENTER IMAGE SO TEXT IS READABLE */
         .img-center { 
             width: 320px;
             transform: translateX(0px) translateZ(-50px); 
@@ -100,7 +99,7 @@
             transform: translateX(400px) translateZ(-200px) rotateY(-40deg); 
         }
         
-        /* ONLY apply complex hover interactions on Desktop */
+        /* Desktop Hover Interactions */
         @media (min-width: 769px) {
             .interactive-perspective {
                 transition: transform 0.1s ease-out; 
@@ -118,37 +117,36 @@
         /* MOBILE RESPONSIVE FIXES */
         @media (max-width: 768px) {
             main.hero-container {
-                padding-top: 6rem;
+                padding-top: 7rem;
+                min-height: 100vh;
             }
             .showcase-wrapper {
-                position: relative; 
-                height: 320px;
-                margin-top: 0;
-                margin-bottom: 2rem;
+                position: absolute;
+                top: 0; bottom: 0; left: 0; right: 0;
+                height: 100%;
+                z-index: 0; /* Safely behind text */
                 animation: float-3d-ambient 8s ease-in-out infinite; 
             }
             .showcase-img {
-                pointer-events: none; 
+                pointer-events: none; /* Disables glitchy touch hovering on mobile */
             }
+            /* Scaled down and positioned perfectly for mobile backgrounds */
             .img-left { 
-                width: 130px;
-                transform: translateX(-100px) translateZ(-150px) rotateY(35deg); 
-                opacity: 0.5;
+                width: 140px;
+                transform: translateX(-120px) translateZ(-200px) rotateY(35deg); 
+                opacity: 0.3;
             }
             .img-center { 
-                width: 180px;
-                transform: translateX(0px) translateZ(0px); 
-                opacity: 0.95;
-                filter: blur(0px) brightness(1.1);
+                width: 220px;
+                transform: translateX(0px) translateZ(-100px); 
+                opacity: 0.15; /* Highly transparent so text is perfectly readable */
+                filter: blur(2px) brightness(0.4);
                 z-index: 5;
             }
             .img-right { 
-                width: 130px;
-                transform: translateX(100px) translateZ(-150px) rotateY(-35deg); 
-                opacity: 0.5;
-            }
-            .showcase-fade {
-                display: none; 
+                width: 140px;
+                transform: translateX(120px) translateZ(-200px) rotateY(-35deg); 
+                opacity: 0.3;
             }
             h1.text-5xl {
                 font-size: 3.2rem;
@@ -177,20 +175,20 @@
     <div class="fixed bottom-[-10%] right-[-10%] w-[600px] h-[600px] bg-primary/10 blur-[150px] rounded-full pointer-events-none -z-10"></div>
 
     <nav class="fixed w-full z-50 glass-panel border-b-0 border-white/5">
-        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex justify-between items-center">
             
-            <div class="flex items-center gap-3" data-aos="fade-down" data-aos-duration="800">
-                <div class="w-10 h-10 rounded-xl border border-primary/50 flex items-center justify-center bg-primary/10 shadow-[0_0_15px_rgba(0,242,255,0.2)] p-1.5">
+            <div class="flex items-center gap-2 sm:gap-3" data-aos="fade-down" data-aos-duration="800">
+                <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-xl border border-primary/50 flex items-center justify-center bg-primary/10 shadow-[0_0_15px_rgba(0,242,255,0.2)] p-1.5">
                     <img src="app-icon.png" alt="Aerodrop Logo" class="w-full h-full object-contain drop-shadow-[0_0_5px_rgba(0,242,255,0.5)]">
                 </div>
-                <span class="font-mono text-xl font-black tracking-[0.2em] text-white">AERODROP</span>
+                <span class="font-mono text-lg sm:text-xl font-black tracking-[0.2em] text-white">AERODROP</span>
             </div>
 
-            <div data-aos="fade-down" data-aos-duration="800" data-aos-delay="200" class="hidden sm:block">
-                <a href="mailto:sincostansupport@gmail.com" class="group relative inline-flex h-10 w-[140px] items-center justify-center overflow-hidden rounded-xl border border-white/10 bg-white/5 font-mono text-xs font-bold tracking-widest text-white/70 transition-all duration-500 ease-[cubic-bezier(0.2,0.8,0.2,1)] hover:w-[290px] hover:border-primary/50 hover:bg-primary/10 hover:shadow-[0_0_20px_rgba(0,242,255,0.2)]">
-                    <div class="absolute top-0 flex flex-col transition-transform duration-500 ease-[cubic-bezier(0.2,0.8,0.2,1)] group-hover:-translate-y-10">
-                        <span class="flex h-10 items-center justify-center whitespace-nowrap">CONTACT US</span>
-                        <span class="flex h-10 items-center justify-center whitespace-nowrap text-primary lowercase tracking-[0.05em]">sincostansupport@gmail.com</span>
+            <div data-aos="fade-down" data-aos-duration="800" data-aos-delay="200" class="block">
+                <a href="mailto:sincostansupport@gmail.com" class="group relative inline-flex h-9 sm:h-10 w-[110px] sm:w-[140px] items-center justify-center overflow-hidden rounded-xl border border-white/10 bg-white/5 font-mono text-[10px] sm:text-xs font-bold tracking-widest text-white/70 transition-all duration-500 ease-[cubic-bezier(0.2,0.8,0.2,1)] hover:w-[240px] sm:hover:w-[290px] hover:border-primary/50 hover:bg-primary/10 hover:shadow-[0_0_20px_rgba(0,242,255,0.2)]">
+                    <div class="absolute top-0 flex flex-col transition-transform duration-500 ease-[cubic-bezier(0.2,0.8,0.2,1)] group-hover:-translate-y-9 sm:group-hover:-translate-y-10">
+                        <span class="flex h-9 sm:h-10 items-center justify-center whitespace-nowrap">CONTACT US</span>
+                        <span class="flex h-9 sm:h-10 items-center justify-center whitespace-nowrap text-primary lowercase tracking-[0.02em] sm:tracking-[0.05em]">sincostansupport@gmail.com</span>
                     </div>
                 </a>
             </div>
@@ -209,11 +207,11 @@
         <div class="showcase-fade"></div>
 
         <div class="relative z-20 flex flex-col items-center w-full">
-            <div data-aos="zoom-in" data-aos-duration="1200" class="relative w-48 h-48 mb-10 animate-float mt-10 md:mt-20">
+            <div data-aos="zoom-in" data-aos-duration="1200" class="relative w-40 h-40 sm:w-48 sm:h-48 mb-8 sm:mb-10 animate-float mt-10 md:mt-20">
                 <div class="absolute inset-0 bg-primary/20 rounded-full blur-2xl animate-pulse-glow"></div>
                 <div class="relative w-full h-full rounded-full border border-primary/30 glass-panel flex items-center justify-center shadow-[0_0_50px_rgba(0,242,255,0.2)]">
-                    <div class="w-28 h-28 rounded-full border border-primary/20 flex items-center justify-center bg-background">
-                        <svg class="w-12 h-12 text-primary drop-shadow-[0_0_10px_rgba(0,242,255,0.8)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div class="w-24 h-24 sm:w-28 sm:h-28 rounded-full border border-primary/20 flex items-center justify-center bg-background">
+                        <svg class="w-10 h-10 sm:w-12 sm:h-12 text-primary drop-shadow-[0_0_10px_rgba(0,242,255,0.8)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
                         </svg>
                     </div>
@@ -222,68 +220,68 @@
                 <div class="absolute inset-[-30px] border border-primary/5 rounded-full"></div>
             </div>
 
-            <h2 data-aos="fade-up" data-aos-delay="200" class="font-mono text-xs md:text-sm tracking-[0.4em] text-primary mb-4 font-bold glow-text">SECURE PROTOCOL ACTIVE</h2>
+            <h2 data-aos="fade-up" data-aos-delay="200" class="font-mono text-[10px] sm:text-xs md:text-sm tracking-[0.3em] sm:tracking-[0.4em] text-primary mb-4 font-bold glow-text">SECURE PROTOCOL ACTIVE</h2>
             
             <h1 data-aos="fade-up" data-aos-delay="300" class="text-5xl md:text-8xl font-black tracking-tight mb-6 leading-tight">
                 Zero Cloud.<br>
                 <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary">Pure Mesh.</span>
             </h1>
             
-            <p data-aos="fade-up" data-aos-delay="400" class="text-white/60 max-w-2xl mx-auto mb-12 text-base md:text-lg font-light leading-relaxed px-4">
+            <p data-aos="fade-up" data-aos-delay="400" class="text-white/60 max-w-2xl mx-auto mb-12 text-sm sm:text-base md:text-lg font-light leading-relaxed px-2">
                 Lightning-fast, peer-to-peer file transfer and clipboard synchronization. Bypass the cloud and sync directly across your local network with uncompromised encryption.
             </p>
 
-            <div data-aos="fade-up" data-aos-delay="500" class="flex flex-col sm:flex-row gap-5 w-full max-w-xl mx-auto px-4 relative z-20">
-                <a href="Aerodrop_Setup.exe" download class="flex-1 bg-primary text-background font-black tracking-widest py-4 px-6 rounded-xl flex items-center justify-center gap-3 hover:scale-[1.05] hover:shadow-[0_0_40px_rgba(0,242,255,0.5)] transition-all duration-300 w-full">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+            <div data-aos="fade-up" data-aos-delay="500" class="flex flex-col sm:flex-row gap-4 sm:gap-5 w-full max-w-xl mx-auto px-2 relative z-20">
+                <a href="Aerodrop_Setup.exe" download class="flex-1 bg-primary text-background font-black tracking-widest py-4 px-6 rounded-xl flex items-center justify-center gap-3 hover:scale-[1.05] hover:shadow-[0_0_40px_rgba(0,242,255,0.5)] transition-all duration-300 w-full text-sm sm:text-base">
+                    <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
                     GET WINDOWS .EXE
                 </a>
 
-                <a href="#" target="_blank" class="flex-1 glass-panel border border-white/10 text-white font-bold tracking-widest py-4 px-6 rounded-xl flex items-center justify-center gap-3 hover:bg-white/5 hover:border-white/30 hover:scale-[1.05] transition-all duration-300 w-full">
-                    <svg class="w-6 h-6" viewBox="0 0 24 24" fill="currentColor"><path d="M3.609 1.814L13.792 12 3.61 22.186a1.983 1.983 0 0 1-.587-1.42V3.235c0-.54.21-1.05.586-1.421z"/><path d="M14.5 12.708l3.125 3.125-11.458 6.625A1.984 1.984 0 0 1 4.333 21.417L14.5 11.25l-3.125-3.125z" fill="#FF3333"/><path d="M17.625 15.833l3.625-2.083a2.012 2.012 0 0 0 0-3.5L17.625 8.167l-3.125 3.125 3.125 3.125z" fill="#FFD100"/><path d="M14.5 11.292L4.333 1.125a1.984 1.984 0 0 1 1.834-1.042L17.625 6.708l-3.125 3.125z" fill="#00A651"/></svg>
+                <a href="#" target="_blank" class="flex-1 glass-panel border border-white/10 text-white font-bold tracking-widest py-4 px-6 rounded-xl flex items-center justify-center gap-3 hover:bg-white/5 hover:border-white/30 hover:scale-[1.05] transition-all duration-300 w-full text-sm sm:text-base">
+                    <svg class="w-5 h-5 sm:w-6 sm:h-6" viewBox="0 0 24 24" fill="currentColor"><path d="M3.609 1.814L13.792 12 3.61 22.186a1.983 1.983 0 0 1-.587-1.42V3.235c0-.54.21-1.05.586-1.421z"/><path d="M14.5 12.708l3.125 3.125-11.458 6.625A1.984 1.984 0 0 1 4.333 21.417L14.5 11.25l-3.125-3.125z" fill="#FF3333"/><path d="M17.625 15.833l3.625-2.083a2.012 2.012 0 0 0 0-3.5L17.625 8.167l-3.125 3.125 3.125 3.125z" fill="#FFD100"/><path d="M14.5 11.292L4.333 1.125a1.984 1.984 0 0 1 1.834-1.042L17.625 6.708l-3.125 3.125z" fill="#00A651"/></svg>
                     GOOGLE PLAY
                 </a>
             </div>
 
-            <div data-aos="fade-up" data-aos-delay="600" class="flex justify-center w-full max-w-xl mx-auto px-4 mt-4 relative z-20">
-                <a href="app-release.apk" download="Aerodrop.apk" class="glass-panel border border-[#3DDC84]/25 text-[#3DDC84] font-bold tracking-widest py-3 px-8 rounded-xl flex items-center justify-center gap-3 hover:bg-[#3DDC84]/10 hover:border-[#3DDC84]/60 hover:scale-[1.03] hover:shadow-[0_0_30px_rgba(61,220,132,0.25)] transition-all duration-300 text-sm w-full sm:w-auto">
-                    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+            <div data-aos="fade-up" data-aos-delay="600" class="flex justify-center w-full max-w-xl mx-auto px-2 mt-4 relative z-20">
+                <a href="app-release.apk" download="Aerodrop.apk" class="glass-panel border border-[#3DDC84]/25 text-[#3DDC84] font-bold tracking-widest py-3 px-6 sm:px-8 rounded-xl flex items-center justify-center gap-2 sm:gap-3 hover:bg-[#3DDC84]/10 hover:border-[#3DDC84]/60 hover:scale-[1.03] hover:shadow-[0_0_30px_rgba(61,220,132,0.25)] transition-all duration-300 text-[11px] sm:text-sm w-full sm:w-auto">
+                    <svg class="w-4 h-4 sm:w-5 sm:h-5" viewBox="0 0 24 24" fill="currentColor">
                         <path d="M6.18 15.64a2.18 2.18 0 0 1-2.18-2.18V9.19a2.18 2.18 0 1 1 4.36 0v4.27a2.18 2.18 0 0 1-2.18 2.18M17.82 15.64a2.18 2.18 0 0 1-2.18-2.18V9.19a2.18 2.18 0 1 1 4.36 0v4.27a2.18 2.18 0 0 1-2.18 2.18M5.5 6.25C5.5 3.93 8.46 2 12 2s6.5 1.93 6.5 4.25v9.75c0 2.32-2.96 4-6.5 4s-6.5-1.68-6.5-4V6.25m2.22-3.06-1-1.73a.25.25 0 0 1 .43-.25l1 1.76a6.6 6.6 0 0 1 3.35-.9c1.21 0 2.35.32 3.35.9l1.01-1.76a.25.25 0 0 1 .43.25l-1 1.73A5.6 5.6 0 0 1 18 6.25H6a5.6 5.6 0 0 1 2.22-3.06M10 5.5a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5m4 0a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5"/>
                     </svg>
                     DIRECT APK DOWNLOAD
-                    <span class="ml-1 text-[9px] font-mono tracking-wider text-[#3DDC84]/50 border border-[#3DDC84]/20 rounded px-1.5 py-0.5 hidden sm:inline">SIDELOAD</span>
+                    <span class="ml-1 text-[8px] sm:text-[9px] font-mono tracking-wider text-[#3DDC84]/50 border border-[#3DDC84]/20 rounded px-1.5 py-0.5 inline">SIDELOAD</span>
                 </a>
             </div>
         </div>
 
     </main>
 
-    <section class="relative z-10 py-20 bg-gradient-to-b from-transparent to-black/50 border-t border-white/5">
-        <div class="max-w-7xl mx-auto px-6">
+    <section class="relative z-10 py-16 sm:py-20 bg-gradient-to-b from-transparent to-black/50 border-t border-white/5">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
                 
-                <div data-aos="fade-up" data-aos-delay="100" class="glass-panel p-8 rounded-2xl hover:-translate-y-2 hover:border-primary/30 transition-all duration-300 group">
-                    <div class="w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center mb-6 group-hover:bg-primary/20 transition-colors duration-300 border border-primary/20">
-                        <svg class="w-7 h-7 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                <div data-aos="fade-up" data-aos-delay="100" class="glass-panel p-6 sm:p-8 rounded-2xl hover:-translate-y-2 hover:border-primary/30 transition-all duration-300 group">
+                    <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-xl bg-primary/10 flex items-center justify-center mb-6 group-hover:bg-primary/20 transition-colors duration-300 border border-primary/20">
+                        <svg class="w-6 h-6 sm:w-7 sm:h-7 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
                     </div>
-                    <h3 class="font-mono text-primary font-bold tracking-widest mb-3">LOCAL MESH TUNNEL</h3>
-                    <p class="text-white/50 text-sm leading-relaxed">Why send your files to a server 1,000 miles away just to reach the phone in your hand? AeroDrop creates a direct TCP socket connection across your local Wi-Fi or hotspot. Wire-speed transfers. No data caps.</p>
+                    <h3 class="font-mono text-primary font-bold tracking-widest mb-3 text-sm sm:text-base">LOCAL MESH TUNNEL</h3>
+                    <p class="text-white/50 text-xs sm:text-sm leading-relaxed">Why send your files to a server 1,000 miles away just to reach the phone in your hand? AeroDrop creates a direct TCP socket connection across your local Wi-Fi or hotspot. Wire-speed transfers. No data caps.</p>
                 </div>
 
-                <div data-aos="fade-up" data-aos-delay="200" class="glass-panel p-8 rounded-2xl hover:-translate-y-2 hover:border-secondary/50 transition-all duration-300 group">
-                    <div class="w-14 h-14 rounded-xl bg-secondary/10 flex items-center justify-center mb-6 group-hover:bg-secondary/20 transition-colors duration-300 border border-secondary/20">
-                        <svg class="w-7 h-7 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                <div data-aos="fade-up" data-aos-delay="200" class="glass-panel p-6 sm:p-8 rounded-2xl hover:-translate-y-2 hover:border-secondary/50 transition-all duration-300 group">
+                    <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-xl bg-secondary/10 flex items-center justify-center mb-6 group-hover:bg-secondary/20 transition-colors duration-300 border border-secondary/20">
+                        <svg class="w-6 h-6 sm:w-7 sm:h-7 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
                     </div>
-                    <h3 class="font-mono text-secondary font-bold tracking-widest mb-3">UNIVERSAL CLIPBOARD</h3>
-                    <p class="text-white/50 text-sm leading-relaxed">Tired of messaging links to yourself? Copy a URL on your Windows PC and paste it instantly on your Android. The background mesh treats your devices like they share a single brain.</p>
+                    <h3 class="font-mono text-secondary font-bold tracking-widest mb-3 text-sm sm:text-base">UNIVERSAL CLIPBOARD</h3>
+                    <p class="text-white/50 text-xs sm:text-sm leading-relaxed">Tired of messaging links to yourself? Copy a URL on your Windows PC and paste it instantly on your Android. The background mesh treats your devices like they share a single brain.</p>
                 </div>
 
-                <div data-aos="fade-up" data-aos-delay="300" class="glass-panel p-8 rounded-2xl hover:-translate-y-2 hover:border-green-500/30 transition-all duration-300 group">
-                    <div class="w-14 h-14 rounded-xl bg-green-500/10 flex items-center justify-center mb-6 group-hover:bg-green-500/20 transition-colors duration-300 border border-green-500/20">
-                        <svg class="w-7 h-7 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                <div data-aos="fade-up" data-aos-delay="300" class="glass-panel p-6 sm:p-8 rounded-2xl hover:-translate-y-2 hover:border-green-500/30 transition-all duration-300 group">
+                    <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-xl bg-green-500/10 flex items-center justify-center mb-6 group-hover:bg-green-500/20 transition-colors duration-300 border border-green-500/20">
+                        <svg class="w-6 h-6 sm:w-7 sm:h-7 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
                     </div>
-                    <h3 class="font-mono text-green-400 font-bold tracking-widest mb-3">CRYPTOGRAPHICALLY SECURE</h3>
-                    <p class="text-white/50 text-sm leading-relaxed">Worried about snoops on public Wi-Fi or corporate networks? Your data never leaves your local hardware. Every session is locked down with rolling 4-digit PINs, SHA-256 hashing, and HMAC challenge-response handshakes.</p>
+                    <h3 class="font-mono text-green-400 font-bold tracking-widest mb-3 text-sm sm:text-base">CRYPTOGRAPHICALLY SECURE</h3>
+                    <p class="text-white/50 text-xs sm:text-sm leading-relaxed">Worried about snoops on public Wi-Fi or corporate networks? Your data never leaves your local hardware. Every session is locked down with rolling 4-digit PINs, SHA-256 hashing, and HMAC challenge-response handshakes.</p>
                 </div>
             </div>
         </div>
