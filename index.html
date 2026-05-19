@@ -51,63 +51,83 @@
         .glow-text { text-shadow: 0 0 20px rgba(0, 242, 255, 0.6); }
         .download-card:hover { border-color: #00F2FF; box-shadow: 0 0 30px rgba(0, 242, 255, 0.15); }
         
-        /* THE 3D ANIMATED SHOWCASE */
+        /* THE FULL-WIDTH 3D ANIMATED SHOWCASE */
         .showcase-container {
-            perspective: 1200px;
+            perspective: 1400px;
             width: 100%;
-            max-width: 1000px;
-            margin: 60px auto -60px auto; 
+            max-width: 1200px; /* Widened to cover empty space */
+            margin: 40px auto 0px auto; 
             position: relative;
             z-index: 10;
         }
         
         .showcase-wrapper {
+            position: relative;
+            height: 550px; /* Added explicit height so absolute images fit perfectly */
             display: flex;
             justify-content: center;
             align-items: center;
             transform-style: preserve-3d;
             animation: float-3d 8s ease-in-out infinite;
-            opacity: 0.25; /* Highly transparent background vibe */
-            transition: opacity 0.5s ease, transform 0.5s ease;
-        }
-
-        .showcase-wrapper:hover {
-            opacity: 0.5;
         }
 
         .showcase-img {
-            width: 260px;
+            position: absolute; /* Crucial for the pop-to-center animation */
+            width: 280px;
             height: auto;
             border-radius: 16px;
             border: 1px solid rgba(0, 242, 255, 0.2);
             box-shadow: 0 15px 50px rgba(0, 0, 0, 0.8), 0 0 20px rgba(0, 242, 255, 0.05);
-            transition: all 0.5s ease;
+            /* This bezier curve gives it that snappy 'Apple-style' pop */
+            transition: all 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+            cursor: pointer;
         }
 
-        /* 3D Positioning */
+        /* DEFAULT SPACED OUT POSITIONS */
         .img-left { 
-            transform: translateX(40px) translateZ(-100px) rotateY(25deg); 
-            filter: blur(1px);
+            transform: translateX(-350px) translateZ(-150px) rotateY(35deg); 
+            opacity: 0.4;
+            filter: blur(2px) brightness(0.7);
         }
         .img-center { 
-            transform: translateZ(50px); 
+            transform: translateX(0px) translateZ(0px) rotateY(0deg); 
             z-index: 2; 
-            width: 300px; 
+            width: 320px; 
+            opacity: 0.85;
             border-color: rgba(0, 242, 255, 0.5);
             box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9), 0 0 30px rgba(0, 242, 255, 0.15);
         }
         .img-right { 
-            transform: translateX(-40px) translateZ(-100px) rotateY(-25deg); 
-            filter: blur(1px);
+            transform: translateX(350px) translateZ(-150px) rotateY(-35deg); 
+            opacity: 0.4;
+            filter: blur(2px) brightness(0.7);
         }
 
-        /* The Smooth Floating Keyframe */
+        /* INTERACTIVE POP-OUT ANIMATIONS */
+        /* 1. When hovering ANY part of the gallery, push everything back and dim it */
+        .showcase-wrapper:hover .showcase-img {
+            opacity: 0.15;
+            filter: blur(5px) brightness(0.4);
+            transform: translateZ(-250px) rotateY(0deg);
+        }
+
+        /* 2. The specific screenshot you are touching overrides the dimming, flies to center, and blooms */
+        .showcase-wrapper .showcase-img:hover {
+            opacity: 1 !important;
+            filter: blur(0px) brightness(1.1) !important;
+            /* Fly to center (translateX:0), pop forward (translateZ:150), and scale up */
+            transform: translateX(0px) translateZ(150px) rotateY(0deg) scale(1.1) !important;
+            z-index: 20;
+            border-color: #00F2FF !important;
+            box-shadow: 0 40px 100px rgba(0, 0, 0, 0.9), 0 0 60px rgba(0, 242, 255, 0.5) !important;
+        }
+
+        /* The Smooth Background Floating Keyframe */
         @keyframes float-3d {
-            0%, 100% { transform: translateY(0) rotateX(5deg); }
-            50% { transform: translateY(-20px) rotateX(0deg); }
+            0%, 100% { transform: translateY(0) rotateX(2deg); }
+            50% { transform: translateY(-15px) rotateX(-2deg); }
         }
 
-        /* Gradient mask to fade the bottom smoothly into the background */
         .showcase-fade {
             position: absolute;
             bottom: 0; left: 0; right: 0;
@@ -161,7 +181,6 @@
         </p>
 
         <div data-aos="fade-up" data-aos-delay="500" class="flex flex-col sm:flex-row gap-5 w-full max-w-xl mx-auto px-4 relative z-20">
-            
             <a href="Aerodrop_Setup.exe" download class="flex-1 bg-primary text-background font-black tracking-widest py-4 px-6 rounded-xl flex items-center justify-center gap-3 hover:scale-[1.05] hover:shadow-[0_0_40px_rgba(0,242,255,0.5)] transition-all duration-300">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
                 GET WINDOWS .EXE
