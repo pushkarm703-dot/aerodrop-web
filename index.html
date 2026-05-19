@@ -20,20 +20,6 @@
                     fontFamily: {
                         mono: ['Courier New', 'monospace'],
                         sans: ['system-ui', '-apple-system', 'sans-serif']
-                    },
-                    animation: {
-                        'float': 'float 6s ease-in-out infinite',
-                        'pulse-glow': 'pulseGlow 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-                    },
-                    keyframes: {
-                        float: {
-                            '0%, 100%': { transform: 'translateY(0)' },
-                            '50%': { transform: 'translateY(-15px)' },
-                        },
-                        pulseGlow: {
-                            '0%, 100%': { opacity: '0.4', transform: 'scale(1)' },
-                            '50%': { opacity: '0.8', transform: 'scale(1.05)' },
-                        }
                     }
                 }
             }
@@ -49,99 +35,73 @@
             border: 1px solid rgba(255, 255, 255, 0.05);
         }
         .glow-text { text-shadow: 0 0 20px rgba(0, 242, 255, 0.6); }
-        .download-card:hover { border-color: #00F2FF; box-shadow: 0 0 30px rgba(0, 242, 255, 0.15); }
         
-        /* THE FULL-WIDTH 3D ANIMATED SHOWCASE */
-        .showcase-container {
-            perspective: 1400px;
-            width: 100%;
-            max-width: 1200px;
-            margin: 40px auto 0px auto; 
-            position: relative;
-            z-index: 10;
-        }
-        
-        .showcase-wrapper {
-            position: relative;
-            height: 550px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            transform-style: preserve-3d;
-            animation: float-3d 8s ease-in-out infinite;
-            /* REMOVED the global opacity here so hovered images can be fully bright! */
+        /* NEW: AMBIENT FLOATING BACKGROUND ANIMATION */
+        .ambient-bg-container {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            overflow: hidden;
+            z-index: -2;
+            pointer-events: none; /* Prevents all mouse glitches */
+            /* Fades the screenshots to black at the bottom so it blends perfectly */
+            mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
+            -webkit-mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
         }
 
-        .showcase-img {
+        .ambient-screenshot {
             position: absolute;
-            width: 280px;
-            height: auto;
             border-radius: 16px;
-            border: 1px solid rgba(0, 242, 255, 0.2);
-            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.8), 0 0 20px rgba(0, 242, 255, 0.05);
-            transition: all 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
-            cursor: pointer;
+            border: 1px solid rgba(0, 242, 255, 0.15);
+            box-shadow: 0 0 40px rgba(0, 242, 255, 0.05);
+            opacity: 0.15; /* Highly transparent background watermark */
+            filter: blur(3px); /* Soft glass effect */
+            will-change: transform;
         }
 
-        /* DEFAULT SPACED OUT POSITIONS (Highly transparent by default) */
-        .img-left { 
-            transform: translateX(-350px) translateZ(-150px) rotateY(35deg); 
-            opacity: 0.3;
-            filter: blur(2px);
+        /* Spaced out positions and independent animations */
+        .ambient-1 {
+            width: 280px;
+            top: 10%;
+            left: 2%;
+            animation: drift-1 18s ease-in-out infinite alternate;
         }
-        .img-center { 
-            transform: translateX(0px) translateZ(0px) rotateY(0deg); 
-            z-index: 2; 
-            width: 320px; 
-            opacity: 0.6;
-            border-color: rgba(0, 242, 255, 0.4);
-            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9), 0 0 30px rgba(0, 242, 255, 0.15);
-        }
-        .img-right { 
-            transform: translateX(350px) translateZ(-150px) rotateY(-35deg); 
-            opacity: 0.3;
-            filter: blur(2px);
-        }
-
-        /* INTERACTIVE POP-OUT ANIMATIONS */
         
-        /* 1. When hovering the gallery area, push ALL images back and dim them heavily */
-        .showcase-wrapper:hover .showcase-img {
-            opacity: 0.1;
-            filter: blur(8px) brightness(0.4);
-            transform: translateZ(-250px) rotateY(0deg);
+        .ambient-2 {
+            width: 320px;
+            top: 30%;
+            right: 2%;
+            animation: drift-2 22s ease-in-out infinite alternate;
         }
 
-        /* 2. BUT the specific image you hover OVERRIDES the dimming. It pops out, gets huge, and glows! */
-        .showcase-wrapper .showcase-img:hover {
-            opacity: 1 !important;
-            filter: blur(0px) brightness(1.15) !important;
-            transform: translateX(0px) translateZ(150px) rotateY(0deg) scale(1.2) !important;
-            z-index: 50 !important;
-            border-color: #00F2FF !important;
-            box-shadow: 0 40px 100px rgba(0, 0, 0, 0.9), 0 0 80px rgba(0, 242, 255, 0.6) !important;
+        .ambient-3 {
+            width: 400px;
+            bottom: -15%;
+            left: 50%;
+            margin-left: -200px; /* Centers it */
+            animation: drift-3 25s ease-in-out infinite alternate;
+            opacity: 0.12;
+            filter: blur(4px);
         }
 
-        /* Background Floating Keyframe */
-        @keyframes float-3d {
-            0%, 100% { transform: translateY(0) rotateX(2deg); }
-            50% { transform: translateY(-15px) rotateX(-2deg); }
+        /* Cinematic Keyframes */
+        @keyframes drift-1 {
+            0% { transform: translateY(0px) rotate(-12deg) scale(1); }
+            100% { transform: translateY(-60px) rotate(-5deg) scale(1.05); }
         }
-
-        .showcase-fade {
-            position: absolute;
-            bottom: 0; left: 0; right: 0;
-            height: 200px;
-            background: linear-gradient(to bottom, transparent, #050B18);
-            z-index: 20;
-            pointer-events: none;
+        @keyframes drift-2 {
+            0% { transform: translateY(0px) rotate(15deg) scale(1); }
+            100% { transform: translateY(50px) rotate(8deg) scale(1.03); }
+        }
+        @keyframes drift-3 {
+            0% { transform: translateY(0px) rotate(-5deg) scale(1); }
+            100% { transform: translateY(-80px) rotate(5deg) scale(1.08); }
         }
     </style>
 </head>
 <body class="font-sans antialiased selection:bg-primary selection:text-black relative flex flex-col min-h-screen">
 
-    <div class="fixed top-[-10%] left-[-10%] w-[500px] h-[500px] bg-secondary/20 blur-[150px] rounded-full pointer-events-none -z-10"></div>
-    <div class="fixed bottom-[-10%] right-[-10%] w-[600px] h-[600px] bg-primary/10 blur-[150px] rounded-full pointer-events-none -z-10"></div>
+    <div class="fixed top-[-10%] left-[-10%] w-[500px] h-[500px] bg-secondary/20 blur-[150px] rounded-full pointer-events-none z-[-10]"></div>
+    <div class="fixed bottom-[-10%] right-[-10%] w-[600px] h-[600px] bg-primary/10 blur-[150px] rounded-full pointer-events-none z-[-10]"></div>
 
     <nav class="fixed w-full z-50 glass-panel border-b-0 border-white/5">
         <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
@@ -154,61 +114,61 @@
         </div>
     </nav>
 
-    <main class="flex-grow flex flex-col items-center justify-center text-center px-4 pt-32 pb-20 relative">
+    <main class="flex-grow flex flex-col items-center justify-center text-center px-4 pt-32 pb-40 relative overflow-hidden">
         
-        <div data-aos="zoom-in" data-aos-duration="1200" class="relative w-48 h-48 mb-10 animate-float mt-10">
-            <div class="absolute inset-0 bg-primary/20 rounded-full blur-2xl animate-pulse-glow"></div>
-            <div class="relative w-full h-full rounded-full border border-primary/30 glass-panel flex items-center justify-center shadow-[0_0_50px_rgba(0,242,255,0.2)]">
-                <div class="w-28 h-28 rounded-full border border-primary/20 flex items-center justify-center bg-background">
-                    <svg class="w-12 h-12 text-primary drop-shadow-[0_0_10px_rgba(0,242,255,0.8)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
-                    </svg>
+        <div class="ambient-bg-container">
+            <img src="screenshot1.png" alt="Background Element" class="ambient-screenshot ambient-1">
+            <img src="screenshot2.png" alt="Background Element" class="ambient-screenshot ambient-2">
+            <img src="screenshot3.png" alt="Background Element" class="ambient-screenshot ambient-3">
+        </div>
+
+        <div class="relative z-20 flex flex-col items-center">
+            
+            <div data-aos="zoom-in" data-aos-duration="1200" class="relative w-48 h-48 mb-10 mt-10">
+                <div class="absolute inset-0 bg-primary/20 rounded-full blur-2xl"></div>
+                <div class="relative w-full h-full rounded-full border border-primary/30 glass-panel flex items-center justify-center shadow-[0_0_50px_rgba(0,242,255,0.2)]">
+                    <div class="w-28 h-28 rounded-full border border-primary/20 flex items-center justify-center bg-background">
+                        <svg class="w-12 h-12 text-primary drop-shadow-[0_0_10px_rgba(0,242,255,0.8)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                        </svg>
+                    </div>
                 </div>
+                <div class="absolute inset-[-15px] border border-primary/10 rounded-full"></div>
+                <div class="absolute inset-[-30px] border border-primary/5 rounded-full"></div>
             </div>
-            <div class="absolute inset-[-15px] border border-primary/10 rounded-full"></div>
-            <div class="absolute inset-[-30px] border border-primary/5 rounded-full"></div>
-        </div>
 
-        <h2 data-aos="fade-up" data-aos-delay="200" class="font-mono text-xs md:text-sm tracking-[0.4em] text-primary mb-4 font-bold glow-text">SECURE PROTOCOL ACTIVE</h2>
-        
-        <h1 data-aos="fade-up" data-aos-delay="300" class="text-5xl md:text-8xl font-black tracking-tight mb-6 leading-tight">
-            Zero Cloud.<br>
-            <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary">Pure Mesh.</span>
-        </h1>
-        
-        <p data-aos="fade-up" data-aos-delay="400" class="text-white/60 max-w-2xl mx-auto mb-12 text-base md:text-lg font-light leading-relaxed px-4">
-            Lightning-fast, peer-to-peer file transfer and clipboard synchronization. Bypass the cloud and sync directly across your local network with uncompromised encryption.
-        </p>
+            <h2 data-aos="fade-up" data-aos-delay="200" class="font-mono text-xs md:text-sm tracking-[0.4em] text-primary mb-4 font-bold glow-text">SECURE PROTOCOL ACTIVE</h2>
+            
+            <h1 data-aos="fade-up" data-aos-delay="300" class="text-5xl md:text-8xl font-black tracking-tight mb-6 leading-tight">
+                Zero Cloud.<br>
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary">Pure Mesh.</span>
+            </h1>
+            
+            <p data-aos="fade-up" data-aos-delay="400" class="text-white/60 max-w-2xl mx-auto mb-12 text-base md:text-lg font-light leading-relaxed px-4">
+                Lightning-fast, peer-to-peer file transfer and clipboard synchronization. Bypass the cloud and sync directly across your local network with uncompromised encryption.
+            </p>
 
-        <div data-aos="fade-up" data-aos-delay="500" class="flex flex-col sm:flex-row gap-5 w-full max-w-xl mx-auto px-4 relative z-20">
-            <a href="Aerodrop_Setup.exe" download class="flex-1 bg-primary text-background font-black tracking-widest py-4 px-6 rounded-xl flex items-center justify-center gap-3 hover:scale-[1.05] hover:shadow-[0_0_40px_rgba(0,242,255,0.5)] transition-all duration-300">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-                GET WINDOWS .EXE
-            </a>
+            <div data-aos="fade-up" data-aos-delay="500" class="flex flex-col sm:flex-row gap-5 w-full max-w-xl mx-auto px-4">
+                <a href="Aerodrop_Setup.exe" download class="flex-1 bg-primary text-background font-black tracking-widest py-4 px-6 rounded-xl flex items-center justify-center gap-3 hover:scale-[1.05] hover:shadow-[0_0_40px_rgba(0,242,255,0.5)] transition-all duration-300">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                    GET WINDOWS .EXE
+                </a>
 
-            <a href="#" target="_blank" class="flex-1 glass-panel border border-white/10 text-white font-bold tracking-widest py-4 px-6 rounded-xl flex items-center justify-center gap-3 hover:bg-white/5 hover:border-white/30 hover:scale-[1.05] transition-all duration-300">
-                <svg class="w-6 h-6" viewBox="0 0 24 24" fill="currentColor"><path d="M3.609 1.814L13.792 12 3.61 22.186a1.983 1.983 0 0 1-.587-1.42V3.235c0-.54.21-1.05.586-1.421z"/><path d="M14.5 12.708l3.125 3.125-11.458 6.625A1.984 1.984 0 0 1 4.333 21.417L14.5 11.25l-3.125-3.125z" fill="#FF3333"/><path d="M17.625 15.833l3.625-2.083a2.012 2.012 0 0 0 0-3.5L17.625 8.167l-3.125 3.125 3.125 3.125z" fill="#FFD100"/><path d="M14.5 11.292L4.333 1.125a1.984 1.984 0 0 1 1.834-1.042L17.625 6.708l-3.125 3.125z" fill="#00A651"/></svg>
-                GOOGLE PLAY
-            </a>
-        </div>
-
-        <div data-aos="fade-up" data-aos-delay="600" class="flex justify-center w-full max-w-xl mx-auto px-4 mt-4 relative z-20">
-            <a href="app-release.apk" download="Aerodrop.apk" class="glass-panel border border-[#3DDC84]/25 text-[#3DDC84] font-bold tracking-widest py-3 px-8 rounded-xl flex items-center justify-center gap-3 hover:bg-[#3DDC84]/10 hover:border-[#3DDC84]/60 hover:scale-[1.03] hover:shadow-[0_0_30px_rgba(61,220,132,0.25)] transition-all duration-300 text-sm w-full sm:w-auto">
-                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M6.18 15.64a2.18 2.18 0 0 1-2.18-2.18V9.19a2.18 2.18 0 1 1 4.36 0v4.27a2.18 2.18 0 0 1-2.18 2.18M17.82 15.64a2.18 2.18 0 0 1-2.18-2.18V9.19a2.18 2.18 0 1 1 4.36 0v4.27a2.18 2.18 0 0 1-2.18 2.18M5.5 6.25C5.5 3.93 8.46 2 12 2s6.5 1.93 6.5 4.25v9.75c0 2.32-2.96 4-6.5 4s-6.5-1.68-6.5-4V6.25m2.22-3.06-1-1.73a.25.25 0 0 1 .43-.25l1 1.76a6.6 6.6 0 0 1 3.35-.9c1.21 0 2.35.32 3.35.9l1.01-1.76a.25.25 0 0 1 .43.25l-1 1.73A5.6 5.6 0 0 1 18 6.25H6a5.6 5.6 0 0 1 2.22-3.06M10 5.5a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5m4 0a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5"/>
-                </svg>
-                DIRECT APK DOWNLOAD
-                <span class="ml-1 text-[9px] font-mono tracking-wider text-[#3DDC84]/50 border border-[#3DDC84]/20 rounded px-1.5 py-0.5 hidden sm:inline">SIDELOAD</span>
-            </a>
-        </div>
-
-        <div class="showcase-container" data-aos="fade-up" data-aos-delay="800" data-aos-duration="1500">
-            <div class="showcase-wrapper">
-                <img src="screenshot1.png" alt="AeroDrop History" class="showcase-img img-left">
-                <img src="screenshot2.png" alt="AeroDrop File Transfer" class="showcase-img img-center">
-                <img src="screenshot3.png" alt="AeroDrop Mesh Clipboard" class="showcase-img img-right">
+                <a href="#" target="_blank" class="flex-1 glass-panel border border-white/10 text-white font-bold tracking-widest py-4 px-6 rounded-xl flex items-center justify-center gap-3 hover:bg-white/5 hover:border-white/30 hover:scale-[1.05] transition-all duration-300">
+                    <svg class="w-6 h-6" viewBox="0 0 24 24" fill="currentColor"><path d="M3.609 1.814L13.792 12 3.61 22.186a1.983 1.983 0 0 1-.587-1.42V3.235c0-.54.21-1.05.586-1.421z"/><path d="M14.5 12.708l3.125 3.125-11.458 6.625A1.984 1.984 0 0 1 4.333 21.417L14.5 11.25l-3.125-3.125z" fill="#FF3333"/><path d="M17.625 15.833l3.625-2.083a2.012 2.012 0 0 0 0-3.5L17.625 8.167l-3.125 3.125 3.125 3.125z" fill="#FFD100"/><path d="M14.5 11.292L4.333 1.125a1.984 1.984 0 0 1 1.834-1.042L17.625 6.708l-3.125 3.125z" fill="#00A651"/></svg>
+                    GOOGLE PLAY
+                </a>
             </div>
-            <div class="showcase-fade"></div>
+
+            <div data-aos="fade-up" data-aos-delay="600" class="flex justify-center w-full max-w-xl mx-auto px-4 mt-4">
+                <a href="app-release.apk" download="Aerodrop.apk" class="glass-panel border border-[#3DDC84]/25 text-[#3DDC84] font-bold tracking-widest py-3 px-8 rounded-xl flex items-center justify-center gap-3 hover:bg-[#3DDC84]/10 hover:border-[#3DDC84]/60 hover:scale-[1.03] hover:shadow-[0_0_30px_rgba(61,220,132,0.25)] transition-all duration-300 text-sm w-full sm:w-auto">
+                    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M6.18 15.64a2.18 2.18 0 0 1-2.18-2.18V9.19a2.18 2.18 0 1 1 4.36 0v4.27a2.18 2.18 0 0 1-2.18 2.18M17.82 15.64a2.18 2.18 0 0 1-2.18-2.18V9.19a2.18 2.18 0 1 1 4.36 0v4.27a2.18 2.18 0 0 1-2.18 2.18M5.5 6.25C5.5 3.93 8.46 2 12 2s6.5 1.93 6.5 4.25v9.75c0 2.32-2.96 4-6.5 4s-6.5-1.68-6.5-4V6.25m2.22-3.06-1-1.73a.25.25 0 0 1 .43-.25l1 1.76a6.6 6.6 0 0 1 3.35-.9c1.21 0 2.35.32 3.35.9l1.01-1.76a.25.25 0 0 1 .43.25l-1 1.73A5.6 5.6 0 0 1 18 6.25H6a5.6 5.6 0 0 1 2.22-3.06M10 5.5a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5m4 0a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5"/>
+                    </svg>
+                    DIRECT APK DOWNLOAD
+                    <span class="ml-1 text-[9px] font-mono tracking-wider text-[#3DDC84]/50 border border-[#3DDC84]/20 rounded px-1.5 py-0.5 hidden sm:inline">SIDELOAD</span>
+                </a>
+            </div>
         </div>
 
     </main>
